@@ -6,6 +6,7 @@ RtcDS1302<ThreeWire> Rtc(myWire); //OBJETO DO TIPO RtcDS1302
 
 const int ButtonPin = 8;     // the number of the pushbutton pin
 const int RelayPin =  7;
+int buttonState;             // the current reading from the input pin
 
 
 void setup () {
@@ -27,23 +28,26 @@ void loop () {
     printDateTime(now); //PASSA OS PARÂMETROS PARA A FUNÇÃO printDateTime
     Serial.println(); //QUEBRA DE LINHA NA SERIAL
     
-    if  (now.Hour() == 7 || now.Hour() == 21){
+    if  (now.Hour() == 6 || now.Hour() == 21){
     if (now.Minute() == 30){
       digitalWrite(RelayPin, LOW);
       Serial.print("It's time!");
       delay(600000);
       digitalWrite(RelayPin, HIGH);
-
     }
   }
 
   if (digitalRead(ButtonPin) == HIGH) {
+    buttonState = !buttonState;
+    Serial.print("Press detected!");
+    if (buttonState) {
       digitalWrite(RelayPin, LOW);
-      Serial.print("Press detected!");
-      delay(300000);
+    }
+    else {
       digitalWrite(RelayPin, HIGH);
+    }
   }
-    delay(5000); //INTERVALO DE 5 SEGUNDOS
+    delay(2500); //INTERVALO DE 5 SEGUNDOS
 }
 
 
